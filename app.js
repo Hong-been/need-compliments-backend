@@ -16,7 +16,6 @@ mongoose
 	.then(() => console.log(`✅ Connected to DB`))
 	.catch((e) => console.log(`❌ Error on DB connection: ${e}`));
 
-console.log("app.js!!!");
 app.listen(PORT, () => {
 	console.log(`Example App listening on port ${PORT}`);
 });
