@@ -5,9 +5,9 @@ const complitmentSchema = new Schema(
 	{
 		task: {type: String, required: true},
 		author: {type: String, required: true},
-		doneAt: Number,
-		createdAt: Number,
-		updatedAt: Number,
+		doneAt: {type: Number, default: new Data().getTime()},
+		createdAt: {type: Number, default: new Data().getTime()},
+		updatedAt: {type: Number, default: new Data().getTime()},
 		type: {
 			type: String,
 			enum: {

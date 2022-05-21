@@ -6,8 +6,8 @@ const goalSchema = new Schema(
 		name: {type: String, required: true},
 		color: {type: String, required: true},
 		author: {type: String, required: true},
-		createdAt: Number,
-		updatedAt: Number,
+		createdAt: {type: Number, default: new Data().getTime()},
+		updatedAt: {type: Number, default: new Data().getTime()},
 		readPermission: {
 			type: String,
 			enum: {

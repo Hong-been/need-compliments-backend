@@ -6,8 +6,8 @@ const userSchema = new Schema(
 		name: {type: String, required: true},
 		email: {type: String, required: true, unique: true},
 		image: String,
-		createdAt: Number,
-		updatedAt: Number,
+		createdAt: {type: Number, default: new Data().getTime()},
+		updatedAt: {type: Number, default: new Data().getTime()},
 	},
 	{timestamps: true}
 );
