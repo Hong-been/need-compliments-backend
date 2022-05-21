@@ -21,6 +21,4 @@ const taskSchema = new Schema(
 	{timestamps: true}
 );
 
-// Create Model & Export
-// 실제 collection의 이름은 ‘Tasks’로 자동 변환되어 사용된다.
 export const Task = mongoose.model("Task", taskSchema);
