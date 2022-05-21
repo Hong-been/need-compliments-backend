@@ -1,0 +1,1 @@
+web: babel app.js
