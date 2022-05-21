@@ -12,4 +12,17 @@ const userSchema = new Schema(
 	{timestamps: true}
 );
 
+userSchema.statics.create = (payload) => {
+	const todo = new this(payload);
+	return todo.save();
+};
+
+userSchema.statics.findOneByUserID = (userId) => {
+	return this.findOne({userId});
+};
+
+userSchema.statics.deleteByUserID = (userId) => {
+	return this.remove({userId});
+};
+
 export const User = mongoose.model("User", userSchema);
