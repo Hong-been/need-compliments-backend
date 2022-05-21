@@ -4,6 +4,9 @@ import morgan from "morgan";
 import mongoose from "mongoose";
 import bodyParser from "body-parser";
 import users from "./src/routes/users";
+import goals from "./src/routes/goals";
+import tasks from "./src/routes/tasks";
+import compliments from "./src/routes/compliments";
 
 dotenv.config();
 const PORT = process.env.PORT || 3000;
@@ -13,6 +16,9 @@ app.use(bodyParser.json());
 app.use(morgan("dev"));
 
 app.use("/users", users);
+app.use("/goals", goals);
+app.use("/tasks", tasks);
+app.use("/compliments", compliments);
 
 mongoose
 	.connect(process.env.MONGODB_URI)
