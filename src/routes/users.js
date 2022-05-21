@@ -1,28 +1,48 @@
 import {Router} from "express";
-import {User} from "models/user";
+import {User} from "../models/user";
 
-// Find One by userid
-Router.get("/userid/:userid", (req, res) => {
-	User.findOneByUserId(req.params.userId)
+const router = Router();
+
+router.get("/userid/:userid", (req, res) => {
+	User.findOneByUserId(req.params.userid)
 		.then((user) => {
-			if (!user) return res.status(404).send({err: "User not found"});
+			if (!user)
+				return res.status(404).send({succes: false, err: "User not found"});
 			res.send(`findOne successfully: ${user}`);
 		})
 		.catch((err) => res.status(500).send(err));
 });
 
-// Create new user
-Router.post("/", (req, res) => {
-	User.create(req.body)
-		.then((user) => res.send(user))
-		.catch((err) => res.status(500).send(err));
+router.post("/", async (req, res) => {
+	try {
+		const result = await User.create(req.body);
+		res.sendStatus(200);
+	} catch (err) {
+		if (err.name === "MongoServerError" && err.code === 11000) {
+			console.log(err);
+			res.status(422).send({
+				succes: false,
+				message: `user already exists. : duplicate ${Object.keys(
+					err.keyValue
+				).join(",")}`,
+			});
+		} else if (err.name === "ValidationError") {
+			res.status(400).send({succes: false, message: err.message});
+		} else {
+			res.status(500).send(err);
+		}
+	}
 });
 
-// Delete by userid
-Router.delete("/userid/:userid", (req, res) => {
-	User.deleteByuserid(req.params.userid)
-		.then(() => res.sendStatus(200))
-		.catch((err) => res.status(500).send(err));
+router.delete("/userid/:userid", async (req, res) => {
+	try {
+		const result = await User.deleteByUserId(req.params.userid);
+		if (!result) {
+			res.status(404).send({succes: false, message: "user not found!"});
+		} else res.sendStatus(200);
+	} catch (err) {
+		res.status(500).send(err);
+	}
 });
 
-export default Router;
+export default router;

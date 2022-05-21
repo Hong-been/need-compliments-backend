@@ -14,9 +14,9 @@ const taskSchema = new Schema(
 			},
 			required: true,
 		},
-		doneAt: {type: Number, default: new Data().getTime()},
-		createdAt: {type: Number, default: new Data().getTime()},
-		updatedAt: {type: Number, default: new Data().getTime()},
+		doneAt: {type: Number, default: new Date().getTime()},
+		createdAt: {type: Number, default: new Date().getTime()},
+		updatedAt: {type: Number, default: new Date().getTime()},
 	},
 	{timestamps: true}
 );

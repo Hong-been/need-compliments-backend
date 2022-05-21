@@ -3,26 +3,31 @@ const {Schema} = mongoose;
 
 const userSchema = new Schema(
 	{
+		userId: {type: String, required: true, unique: true},
 		name: {type: String, required: true},
-		email: {type: String, required: true, unique: true},
+		email: {
+			type: String,
+			required: true,
+			unique: [true, "email must be unique"],
+		},
 		image: String,
-		createdAt: {type: Number, default: new Data().getTime()},
-		updatedAt: {type: Number, default: new Data().getTime()},
+		createdAt: {type: Number, default: new Date().getTime()},
+		updatedAt: {type: Number, default: new Date().getTime()},
 	},
 	{timestamps: true}
 );
 
-userSchema.statics.create = (payload) => {
-	const todo = new this(payload);
-	return todo.save();
+userSchema.statics.create = async (payload) => {
+	const user = await new User(payload);
+	return user.save();
 };
 
-userSchema.statics.findOneByUserID = (userId) => {
-	return this.findOne({userId});
+userSchema.statics.findOneByUserId = async (userId) => {
+	return await User.findOne({userId});
 };
 
-userSchema.statics.deleteByUserID = (userId) => {
-	return this.remove({userId});
+userSchema.statics.deleteByUserId = async (userId) => {
+	return await User.findOneAndDelete({userId});
 };
 
 export const User = mongoose.model("User", userSchema);
