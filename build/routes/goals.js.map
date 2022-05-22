@@ -1,0 +1,1 @@
+{"version":3,"file":"goals.js","names":["router","Router"],"sources":["../../src/routes/goals.js"],"sourcesContent":["import {Router} from \"express\";\nimport {Goal} from \"../models/goal\";\n\nconst router = Router();\n\nexport default router;\n"],"mappings":";;;;;;;AAAA;;AACA;;AAEA,IAAMA,MAAM,GAAG,IAAAC,eAAA,GAAf;eAEeD,M"}

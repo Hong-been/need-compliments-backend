@@ -3,10 +3,10 @@ import express from "express";
 import morgan from "morgan";
 import mongoose from "mongoose";
 import bodyParser from "body-parser";
-import users from "./src/routes/users";
-import goals from "./src/routes/goals";
-import tasks from "./src/routes/tasks";
-import compliments from "./src/routes/compliments";
+import users from "./routes/users";
+import goals from "./routes/goals";
+import tasks from "./routes/tasks";
+import compliments from "./routes/compliments";
 
 dotenv.config();
 const PORT = process.env.PORT || 3000;

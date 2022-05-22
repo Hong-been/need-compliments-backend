@@ -3,8 +3,11 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "node app.js",
+    "start": "npm run build && node ./build/app.js",
     "dev": "nodemon --exec",
+    "clean": "rm -rf build && mkdir build",
+    "build-babel": "babel -d ./build ./src -s",
+    "build": "npm run clean && npm run build-babel",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": "https://github.com/Hong-been/need-compliments-backend.git",
