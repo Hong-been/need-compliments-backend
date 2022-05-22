@@ -15,8 +15,8 @@ const PORT = process.env.PORT || 3000;
 const app = express();
 
 const whiteList = [
-	"http://localhost:3000/",
-	"https://need-compliments-sandy.vercel.app/",
+	"http://localhost:3000",
+	"https://need-compliments-sandy.vercel.app",
 ];
 const corsOption = {
 	origin: (origin, callback) => {
@@ -39,7 +39,7 @@ app.use("/compliments", compliments);
 
 mongoose
 	.connect(process.env.MONGODB_URI)
-	.then(() => console.log(`✅ Connected to DB!!`))
+	.then(() => console.log(`✅ Connected to DB~!`))
 	.catch((e) => console.log(`❌ Error on DB connection: ${e}`));
 
 app.listen(PORT, () => {
