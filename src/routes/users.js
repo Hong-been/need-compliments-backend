@@ -9,7 +9,7 @@ router.get("/userid/:userid", async (req, res) => {
 		if (!result) {
 			return res.status(404).send({succes: false, err: "User not found"});
 		}
-		res.send(`findOne successfully: ${result}`);
+		res.send(`user: ${result}`);
 	} catch (err) {
 		res.status(500).send(err);
 	}
@@ -18,7 +18,7 @@ router.get("/userid/:userid", async (req, res) => {
 router.post("/", async (req, res) => {
 	try {
 		const result = await User.create(req.body);
-		return res.sendStatus(200);
+		return res.send(`user: ${result}`);
 	} catch (err) {
 		if (err.name === "MongoServerError" && err.code === 11000) {
 			console.log(err);
