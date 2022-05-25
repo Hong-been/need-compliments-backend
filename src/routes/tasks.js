@@ -1,6 +1,7 @@
 import {Router} from "express";
 import {Task} from "../models/task";
 import {Compliment} from "../models/compliment";
+import {Goal} from "../models/goal";
 
 const router = Router();
 
@@ -22,6 +23,53 @@ router.get("/public", async (req, res) => {
 	}
 });
 
+router.get("/public-all", async (req, res) => {
+	const LIMIT = 20;
+	const page = req.query.page || 1;
+	const offset = (page - 1) * LIMIT;
+
+	try {
+		const tasks = await Task.findPublicTasks(LIMIT, offset);
+		if (!tasks) {
+			return res
+				.status(404)
+				.json({succes: false, err: `public tasks not found!`});
+		}
+
+		const goalIds = Array.from(new Set(tasks.map((task) => task.goal)));
+		const taskIds = tasks.map((task) => task._id);
+
+		// 두개 병렬로 진행하도록?
+		const goals = await Goal.findByGoalIds(goalIds);
+		const taskIdAndComplimentsMap = await Compliment.findByTaskIds(taskIds);
+
+		// 둘다끝나면 조합시키기
+		const response = tasks.map((task) => {
+			const goal =
+				goals.find((goal) => goal._id.toString() === task.goal) || null;
+
+			return {
+				goal,
+				task: {
+					_id: task._id,
+					title: task.title,
+					goal: task.goal,
+					author: task.author,
+					readPermission: task.readPermission,
+					doneAt: task.doneAt,
+					createdAt: task.createdAt,
+					updatedAt: task.updatedAt,
+					compliments: taskIdAndComplimentsMap[task._id],
+				},
+			};
+		});
+
+		res.json(response);
+	} catch (err) {
+		res.status(500).send(err);
+	}
+});
+
 router.get("/:taskIds/compliments", async (req, res) => {
 	try {
 		const ids = req.params.taskIds.split(",");
@@ -29,7 +77,7 @@ router.get("/:taskIds/compliments", async (req, res) => {
 		if (!result) {
 			return res.status(404).json({succes: false, err: "User not found"});
 		}
-		res.json({compliments: result});
+		res.json(result);
 	} catch (err) {
 		res.status(500).send(err);
 	}

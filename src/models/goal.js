@@ -36,6 +36,10 @@ goalSchema.statics.findByGoalIds = async (goalIds) => {
 	return await Goal.find({_id: {$in: goalIds}});
 };
 
+goalSchema.statics.findByGoalId = async (goalId) => {
+	return await Goal.findById(goalId);
+};
+
 // PATCH: goalId를 주면 goal로 업데이트 진행
 goalSchema.statics.patchByGoalId = async (goalId, goal) => {
 	return await Goal.findByIdAndUpdate(goalId, {

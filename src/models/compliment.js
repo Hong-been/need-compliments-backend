@@ -28,7 +28,22 @@ complitmentSchema.statics.create = async (payload) => {
 
 // GET: taskIds주면 해당되는거 가져오기
 complitmentSchema.statics.findByTaskIds = async (taskIds) => {
-	return await Compliment.find({task: {$in: taskIds}});
+	const result = await Compliment.find({task: {$in: taskIds}});
+	const map = {};
+
+	taskIds.forEach((taskId) => {
+		map[taskId] = [];
+	});
+
+	result.forEach((item) => {
+		map[item.task] && map[item.task].push(item);
+	});
+
+	return map;
+};
+
+complitmentSchema.statics.findByTaskId = async (taskId) => {
+	return await Compliment.find({task: taskId});
 };
 
 // DELETE: complimentId를 삭제
