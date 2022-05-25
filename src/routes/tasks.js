@@ -1,5 +1,6 @@
 import {Router} from "express";
 import {Task} from "../models/task";
+import {Compliment} from "../models/compliment";
 
 const router = Router();
 
@@ -16,6 +17,19 @@ router.get("/public", async (req, res) => {
 				.json({succes: false, err: `public tasks not found!`});
 		}
 		res.json({tasks: result});
+	} catch (err) {
+		res.status(500).send(err);
+	}
+});
+
+router.get("/:taskIds/compliments", async (req, res) => {
+	try {
+		const ids = req.params.taskIds.split(",");
+		const result = await Compliment.findByTaskIds(ids);
+		if (!result) {
+			return res.status(404).json({succes: false, err: "User not found"});
+		}
+		res.json({compliments: result});
 	} catch (err) {
 		res.status(500).send(err);
 	}

@@ -11,7 +11,7 @@ const complitmentSchema = new Schema(
 		type: {
 			type: String,
 			enum: {
-				values: ["party-popper" | "thumbs-up" | "clapping-hands" | "red-heart"],
+				values: ["party-popper", "thumbs-up", "clapping-hands", "red-heart"],
 				message: `{VALUE} is not matched with compliment type!`,
 			},
 			required: true,
@@ -19,5 +19,21 @@ const complitmentSchema = new Schema(
 	},
 	{timestamps: true}
 );
+
+// POST: (task, author, type) goal데이터를 보내면 저장한다
+complitmentSchema.statics.create = async (payload) => {
+	const compliment = await new Compliment(payload);
+	return compliment.save();
+};
+
+// GET: taskIds주면 해당되는거 가져오기
+complitmentSchema.statics.findByTaskIds = async (taskIds) => {
+	return await Compliment.find({task: {$in: taskIds}});
+};
+
+// DELETE: complimentId를 삭제
+complitmentSchema.statics.deleteByComplimentId = async (complimentId) => {
+	return await Compliment.findByIdAndDelete(complimentId);
+};
 
 export const Compliment = mongoose.model("Compliment", complitmentSchema);

@@ -6,7 +6,7 @@ const router = Router();
 router.get("/:goalIds", async (req, res) => {
 	try {
 		const ids = req.params.goalIds.split(",");
-		const result = await Goal.find({_id: {$in: ids}});
+		const result = await Goal.findByGoalIds(ids);
 		if (!result) {
 			return res.status(404).json({succes: false, err: "User not found"});
 		}
