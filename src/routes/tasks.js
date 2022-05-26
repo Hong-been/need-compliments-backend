@@ -101,10 +101,11 @@ router.post("/", async (req, res) => {
 router.patch("/:taskid", async (req, res) => {
 	try {
 		const result = await Task.patchByTaskId(req.params.taskid, req.body);
+		console.log(result);
 		if (!result) {
 			return res.status(404).json({succes: false, message: "task not found!"});
 		}
-		return res.sendStatus(200);
+		return res.json(result);
 	} catch (err) {
 		if (err.name === "CastError")
 			return res

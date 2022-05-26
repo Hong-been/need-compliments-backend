@@ -37,7 +37,7 @@ router.patch("/:goalid", async (req, res) => {
 		if (!result) {
 			return res.status(404).json({succes: false, message: "goal not found!"});
 		}
-		return res.sendStatus(200);
+		return res.json(result);
 	} catch (err) {
 		if (err.name === "CastError")
 			return res

@@ -43,10 +43,16 @@ taskSchema.statics.findPublicTasks = async (limit, offset) => {
 
 // PATCH: taskId를 주면 task로 업데이트 진행
 taskSchema.statics.patchByTaskId = async (taskId, task) => {
-	return await Task.findByIdAndUpdate(taskId, {
-		...task,
-		updatedAt: new Date().getTime(),
-	});
+	console.log(taskId, task);
+	return await Task.findByIdAndUpdate(
+		taskId,
+		{
+			title: task.title && task.title,
+			doneAt: task.doneAt && task.doneAt,
+			updatedAt: new Date().getTime(),
+		},
+		{new: true}
+	);
 };
 
 // DELETE: taskId를 삭제

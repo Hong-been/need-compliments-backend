@@ -42,10 +42,16 @@ goalSchema.statics.findByGoalId = async (goalId) => {
 
 // PATCH: goalId를 주면 goal로 업데이트 진행
 goalSchema.statics.patchByGoalId = async (goalId, goal) => {
-	return await Goal.findByIdAndUpdate(goalId, {
-		...goal,
-		updatedAt: new Date().getTime(),
-	});
+	return await Goal.findByIdAndUpdate(
+		goalId,
+		{
+			name: goal.name && goal.name,
+			color: goal.color && goal.color,
+			readPermission: goal.readPermission && goal.readPermission,
+			updatedAt: new Date().getTime(),
+		},
+		{new: true}
+	);
 };
 
 // DELETE: goalId를 삭제
