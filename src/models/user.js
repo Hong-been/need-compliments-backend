@@ -7,6 +7,8 @@ const userSchema = new Schema(
 		name: {type: String, required: true},
 		email: String,
 		image: String,
+		followers: [],
+		followings: [],
 		createdAt: {type: Number, default: new Date().getTime()},
 		updatedAt: {type: Number, default: new Date().getTime()},
 	},
