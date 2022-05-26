@@ -5,11 +5,7 @@ const userSchema = new Schema(
 	{
 		userId: {type: String, required: true, unique: true},
 		name: {type: String, required: true},
-		email: {
-			type: String,
-			required: true,
-			unique: [true, "email must be unique"],
-		},
+		email: String,
 		image: String,
 		createdAt: {type: Number, default: new Date().getTime()},
 		updatedAt: {type: Number, default: new Date().getTime()},
