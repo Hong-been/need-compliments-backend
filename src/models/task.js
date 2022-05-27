@@ -34,8 +34,12 @@ taskSchema.statics.findByUserId = async (author) => {
 
 // GET: readPermission 주면 doneAt기준 최신20개 task 가져오기
 // 숫자가 클수록 최신, 큰 순서대로. 내림차순!
-taskSchema.statics.findPublicTasks = async (limit, offset) => {
-	return await Task.find({readPermission: "everyone"})
+taskSchema.statics.findReadPermissionTasks = async (
+	readPermission,
+	limit,
+	offset
+) => {
+	return await Task.find({readPermission})
 		.sort({doneAt: -1})
 		.limit(limit)
 		.skip(offset);

@@ -5,36 +5,34 @@ import {Goal} from "../models/goal";
 
 const router = Router();
 
-router.get("/public", async (req, res) => {
+router.get("/", async (req, res) => {
 	const LIMIT = 20;
 	const page = req.query.page || 1;
 	const offset = (page - 1) * LIMIT;
-
-	try {
-		const result = await Task.findPublicTasks(LIMIT, offset);
-		if (!result) {
-			return res
-				.status(404)
-				.json({succes: false, err: `public tasks not found!`});
-		}
-		res.json({tasks: result});
-	} catch (err) {
-		res.status(500).send(err);
+	const combined = req.query.combined || "false";
+	const readPermission = req.query.readPermission;
+	if (
+		readPermission !== "everyone" &&
+		readPermission !== "me" &&
+		readPermission !== "none"
+	) {
+		return res
+			.status(400)
+			.json({succes: false, err: `${readPermission} not matched`});
 	}
-});
-
-router.get("/public-all", async (req, res) => {
-	const LIMIT = 20;
-	const page = req.query.page || 1;
-	const offset = (page - 1) * LIMIT;
 
 	try {
-		const tasks = await Task.findPublicTasks(LIMIT, offset);
+		const tasks = await Task.findReadPermissionTasks(
+			readPermission,
+			LIMIT,
+			offset
+		);
 		if (!tasks) {
 			return res
 				.status(404)
-				.json({succes: false, err: `public tasks not found!`});
+				.json({succes: false, err: `${readPermission} tasks not found!`});
 		}
+		if (combined !== "true") res.json({tasks});
 
 		const goalIds = Array.from(new Set(tasks.map((task) => task.goal)));
 		const taskIds = tasks.map((task) => task._id);
