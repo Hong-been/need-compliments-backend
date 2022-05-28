@@ -32,7 +32,10 @@ router.get("/", async (req, res) => {
 				.status(404)
 				.json({succes: false, err: `${readPermission} tasks not found!`});
 		}
-		if (combined !== "true") res.json({tasks});
+		if (combined !== "true") {
+			res.json({tasks});
+			return;
+		}
 
 		const goalIds = Array.from(new Set(tasks.map((task) => task.goal)));
 		const taskIds = tasks.map((task) => task._id);
@@ -47,22 +50,20 @@ router.get("/", async (req, res) => {
 				goals.find((goal) => goal._id.toString() === task.goal) || null;
 
 			return {
-				goal,
-				task: {
-					_id: task._id,
-					title: task.title,
-					goal: task.goal,
-					author: task.author,
-					readPermission: task.readPermission,
-					doneAt: task.doneAt,
-					createdAt: task.createdAt,
-					updatedAt: task.updatedAt,
-					compliments: taskIdAndComplimentsMap[task._id],
-				},
+				_id: task._id,
+				title: task.title,
+				goal: task.goal,
+				goalData: goal,
+				author: task.author,
+				readPermission: task.readPermission,
+				doneAt: task.doneAt,
+				createdAt: task.createdAt,
+				updatedAt: task.updatedAt,
+				compliments: taskIdAndComplimentsMap[task._id],
 			};
 		});
 
-		res.json(response);
+		res.json({tasks: response});
 	} catch (err) {
 		res.status(500).send(err);
 	}
