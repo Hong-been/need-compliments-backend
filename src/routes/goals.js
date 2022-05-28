@@ -1,5 +1,6 @@
 import {Router} from "express";
 import {Goal} from "../models/goal";
+import {Task} from "../models/task";
 
 const router = Router();
 
@@ -49,11 +50,17 @@ router.patch("/:goalid", async (req, res) => {
 
 router.delete("/:goalid", async (req, res) => {
 	try {
-		const result = await Goal.deleteByGoalId(req.params.goalid);
+		const goalId = req.params.goalid;
+		const result = await Goal.deleteByGoalId(goalId);
 		if (!result) {
 			return res.status(404).json({succes: false, message: "goal not found!"});
 		}
-		return res.sendStatus(200);
+		const {deletedCount} = await Task.deleteMany({goal: goalId});
+
+		return res.status(200).json({
+			succes: true,
+			message: `${deletedCount} tasks deleted successfully!`,
+		});
 	} catch (err) {
 		return res.status(500).json(err);
 	}
