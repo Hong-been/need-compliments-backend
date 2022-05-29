@@ -3,7 +3,7 @@ const {Schema} = mongoose;
 
 const taskSchema = new Schema(
 	{
-		title: {type: String, required: true},
+		title: {type: String},
 		goal: {type: String, required: true},
 		author: {type: String, required: true},
 		readPermission: {
