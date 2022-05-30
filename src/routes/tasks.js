@@ -2,28 +2,25 @@ import {Router} from "express";
 import {Task} from "../models/task";
 import {Compliment} from "../models/compliment";
 import {Goal} from "../models/goal";
+import compliments from "../../build/routes/compliments";
+import {readPermissionTypes} from "../utils/types.js";
 
 const router = Router();
 
 router.get("/", async (req, res) => {
 	const LIMIT = 20;
-	const page = req.query.page || 1;
-	const offset = (page - 1) * LIMIT;
-	const combined = req.query.combined || "false";
-	const readPermission = req.query.readPermission;
-	if (
-		readPermission !== "everyone" &&
-		readPermission !== "me" &&
-		readPermission !== "none"
-	) {
+	const {page, userId, combined, start, end, readPermission} = req.query;
+	const offset = page ? (page - 1) * LIMIT : null;
+
+	if (readPermissionTypes.findIndex(readPermission) === -1) {
 		return res
 			.status(400)
 			.json({succes: false, err: `${readPermission} not matched`});
 	}
 
 	try {
-		const tasks = await Task.findReadPermissionTasks(
-			readPermission,
+		const tasks = await Task.findByQueriesTasks(
+			{readPermission, userId, start, end},
 			LIMIT,
 			offset
 		);
@@ -33,8 +30,8 @@ router.get("/", async (req, res) => {
 				.json({succes: false, err: `${readPermission} tasks not found!`});
 		}
 		if (combined !== "true") {
-			res.json({tasks});
-			return;
+			tasks.compliments = [];
+			return res.json({tasks});
 		}
 
 		const goalIds = Array.from(new Set(tasks.map((task) => task.goal)));
@@ -63,9 +60,9 @@ router.get("/", async (req, res) => {
 			};
 		});
 
-		res.json({tasks: response});
+		return res.json({tasks: response});
 	} catch (err) {
-		res.status(500).send(err);
+		return res.status(500).send(err);
 	}
 });
 
@@ -76,9 +73,10 @@ router.get("/:taskIds/compliments", async (req, res) => {
 		if (!result) {
 			return res.status(404).json({succes: false, err: "User not found"});
 		}
-		res.json(result);
+		result.compliments = [];
+		return res.json(result);
 	} catch (err) {
-		res.status(500).send(err);
+		return res.status(500).send(err);
 	}
 });
 
@@ -88,7 +86,10 @@ router.post("/", async (req, res) => {
 		res.set({
 			"Content-Location": `tasks/${result._id}`,
 		});
-		return res.json({task: result});
+		result.compliments = [];
+		return res.json({
+			task: {result},
+		});
 	} catch (err) {
 		if (err.name === "ValidationError") {
 			return res.status(400).json({succes: false, message: err.message});
@@ -100,10 +101,10 @@ router.post("/", async (req, res) => {
 router.patch("/:taskid", async (req, res) => {
 	try {
 		const result = await Task.patchByTaskId(req.params.taskid, req.body);
-		console.log(result);
 		if (!result) {
 			return res.status(404).json({succes: false, message: "task not found!"});
 		}
+		result.compliments = [];
 		return res.json(result);
 	} catch (err) {
 		if (err.name === "CastError")

@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import {readPermissionTypes} from "../utils/types";
 const {Schema} = mongoose;
 
 const goalSchema = new Schema(
@@ -11,7 +12,7 @@ const goalSchema = new Schema(
 		readPermission: {
 			type: String,
 			enum: {
-				values: ["everyone", "me", "none"],
+				values: readPermissionTypes,
 				message: `{VALUE} is not matched with readPermission!`,
 			},
 			required: true,

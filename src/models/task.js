@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import {readPermissionTypes} from "../utils/types.js";
 const {Schema} = mongoose;
 
 const taskSchema = new Schema(
@@ -9,7 +10,7 @@ const taskSchema = new Schema(
 		readPermission: {
 			type: String,
 			enum: {
-				values: ["everyone", "me", "none"],
+				values: readPermissionTypes,
 				message: `{VALUE} is not matched with everyone, me or none`,
 			},
 			required: true,
@@ -32,17 +33,18 @@ taskSchema.statics.findByUserId = async (author) => {
 	return await Task.find({author});
 };
 
-// GET: readPermission 주면 doneAt기준 최신20개 task 가져오기
-// 숫자가 클수록 최신, 큰 순서대로. 내림차순!
-taskSchema.statics.findReadPermissionTasks = async (
-	readPermission,
-	limit,
-	offset
-) => {
-	return await Task.find({readPermission})
-		.sort({doneAt: -1})
-		.limit(limit)
-		.skip(offset);
+taskSchema.statics.findByQueriesTasks = async (queries, limit, offset) => {
+	const {readPermission, userId, start, end} = queries;
+	const option = {
+		readPermission: readPermission || {$exists: true},
+		userId: userId || {$exists: true},
+		doneAt: start && end ? {$gte: start, $lte: end} : {$exists: true},
+	};
+
+	const result = await Task.find(option);
+
+	if (offset) return result.sort({doneAt: -1}).limit(limit).skip(offset);
+	return result;
 };
 
 // PATCH: taskId를 주면 task로 업데이트 진행

@@ -5,7 +5,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.User = void 0;
+exports.Counter = void 0;
 
 var _mongoose = _interopRequireDefault(require("mongoose"));
 
@@ -18,45 +18,34 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
 var Schema = _mongoose["default"].Schema;
-var userSchema = new Schema({
-  userId: {
-    type: String,
-    required: true,
-    unique: true
-  },
-  name: {
-    type: String,
+var counterSchema = new Schema({
+  sequence_counter: {
+    type: Number,
     required: true
-  },
-  email: String,
-  image: String,
-  followers: [],
-  followings: [],
-  createdAt: {
-    type: Number,
-    "default": new Date().getTime()
-  },
-  updatedAt: {
-    type: Number,
-    "default": new Date().getTime()
   }
-}, {
-  timestamps: true
-});
+}); // https://velog.io/@gytlr01/mongodb-%EC%9E%90%EB%8F%99-%EB%B2%88%ED%98%B8-%EC%A6%9D%EA%B0%80-%EA%B5%AC%ED%98%84
 
-userSchema.statics.create = /*#__PURE__*/function () {
-  var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(payload) {
-    var user;
+counterSchema.statics.getNextSequenceValue = /*#__PURE__*/function () {
+  var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(sequenceName) {
+    var sequenceDocument;
     return _regeneratorRuntime().wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
             _context.next = 2;
-            return new User(payload);
+            return Counter.findOneAndUpdate({
+              _id: id
+            }, {
+              $inc: {
+                sequence_counter: 1
+              }
+            }, {
+              returnOriginal: false
+            });
 
           case 2:
-            user = _context.sent;
-            return _context.abrupt("return", user.save());
+            sequenceDocument = _context.sent;
+            return _context.abrupt("return", sequenceDocument.value.sequence_counter);
 
           case 4:
           case "end":
@@ -71,61 +60,7 @@ userSchema.statics.create = /*#__PURE__*/function () {
   };
 }();
 
-userSchema.statics.findOneByUserId = /*#__PURE__*/function () {
-  var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(userId) {
-    return _regeneratorRuntime().wrap(function _callee2$(_context2) {
-      while (1) {
-        switch (_context2.prev = _context2.next) {
-          case 0:
-            _context2.next = 2;
-            return User.findOne({
-              userId: userId
-            });
+var Counter = _mongoose["default"].model("Counter", counterSchema);
 
-          case 2:
-            return _context2.abrupt("return", _context2.sent);
-
-          case 3:
-          case "end":
-            return _context2.stop();
-        }
-      }
-    }, _callee2);
-  }));
-
-  return function (_x2) {
-    return _ref2.apply(this, arguments);
-  };
-}();
-
-userSchema.statics.deleteByUserId = /*#__PURE__*/function () {
-  var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(userId) {
-    return _regeneratorRuntime().wrap(function _callee3$(_context3) {
-      while (1) {
-        switch (_context3.prev = _context3.next) {
-          case 0:
-            _context3.next = 2;
-            return User.findOneAndDelete({
-              userId: userId
-            });
-
-          case 2:
-            return _context3.abrupt("return", _context3.sent);
-
-          case 3:
-          case "end":
-            return _context3.stop();
-        }
-      }
-    }, _callee3);
-  }));
-
-  return function (_x3) {
-    return _ref3.apply(this, arguments);
-  };
-}();
-
-var User = _mongoose["default"].model("User", userSchema);
-
-exports.User = User;
-//# sourceMappingURL=user.js.map
+exports.Counter = Counter;
+//# sourceMappingURL=counter.js.map
