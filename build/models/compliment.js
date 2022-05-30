@@ -170,7 +170,7 @@ complitmentSchema.statics.deleteByComplimentId = /*#__PURE__*/function () {
   };
 }();
 
-var Compliment = _mongoose["default"].model("Compliment", complitmentSchema);
+var Compliment = _mongoose["default"].models.Compliment || _mongoose["default"].model("Compliment", complitmentSchema);
 
 exports.Compliment = Compliment;
 //# sourceMappingURL=compliment.js.map

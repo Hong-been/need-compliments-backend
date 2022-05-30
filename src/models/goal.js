@@ -60,4 +60,4 @@ goalSchema.statics.deleteByGoalId = async (goalId) => {
 	return await Goal.findByIdAndDelete(goalId);
 };
 
-export const Goal = mongoose.model("Goal", goalSchema);
+export const Goal = mongoose.models.Goal || mongoose.model("Goal", goalSchema);

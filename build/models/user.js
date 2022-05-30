@@ -125,7 +125,7 @@ userSchema.statics.deleteByUserId = /*#__PURE__*/function () {
   };
 }();
 
-var User = _mongoose["default"].model("User", userSchema);
+var User = _mongoose["default"].models.User || _mongoose["default"].model("User", userSchema);
 
 exports.User = User;
 //# sourceMappingURL=user.js.map

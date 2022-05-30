@@ -79,10 +79,10 @@ router.get("/", /*#__PURE__*/function () {
               break;
             }
 
-            res.json({
+            tasks.compliments = [];
+            return _context.abrupt("return", res.json({
               tasks: tasks
-            });
-            return _context.abrupt("return");
+            }));
 
           case 14:
             goalIds = Array.from(new Set(tasks.map(function (task) {
@@ -120,16 +120,14 @@ router.get("/", /*#__PURE__*/function () {
                 compliments: taskIdAndComplimentsMap[task._id]
               };
             });
-            res.json({
+            return _context.abrupt("return", res.json({
               tasks: response
-            });
-            _context.next = 29;
-            break;
+            }));
 
           case 26:
             _context.prev = 26;
             _context.t0 = _context["catch"](5);
-            res.status(500).send(_context.t0);
+            return _context.abrupt("return", res.status(500).send(_context.t0));
 
           case 29:
           case "end":
@@ -169,21 +167,20 @@ router.get("/:taskIds/compliments", /*#__PURE__*/function () {
             }));
 
           case 7:
-            res.json(result);
-            _context2.next = 13;
-            break;
+            result.compliments = [];
+            return _context2.abrupt("return", res.json(result));
 
-          case 10:
-            _context2.prev = 10;
+          case 11:
+            _context2.prev = 11;
             _context2.t0 = _context2["catch"](0);
-            res.status(500).send(_context2.t0);
+            return _context2.abrupt("return", res.status(500).send(_context2.t0));
 
-          case 13:
+          case 14:
           case "end":
             return _context2.stop();
         }
       }
-    }, _callee2, null, [[0, 10]]);
+    }, _callee2, null, [[0, 11]]);
   }));
 
   return function (_x3, _x4) {
@@ -206,18 +203,19 @@ router.post("/", /*#__PURE__*/function () {
             res.set({
               "Content-Location": "tasks/".concat(result._id)
             });
+            result.compliments = [];
             return _context3.abrupt("return", res.json({
               task: {
                 result: result
               }
             }));
 
-          case 8:
-            _context3.prev = 8;
+          case 9:
+            _context3.prev = 9;
             _context3.t0 = _context3["catch"](0);
 
             if (!(_context3.t0.name === "ValidationError")) {
-              _context3.next = 12;
+              _context3.next = 13;
               break;
             }
 
@@ -226,15 +224,15 @@ router.post("/", /*#__PURE__*/function () {
               message: _context3.t0.message
             }));
 
-          case 12:
+          case 13:
             res.status(500).send(_context3.t0);
 
-          case 13:
+          case 14:
           case "end":
             return _context3.stop();
         }
       }
-    }, _callee3, null, [[0, 8]]);
+    }, _callee3, null, [[0, 9]]);
   }));
 
   return function (_x5, _x6) {
@@ -266,14 +264,15 @@ router.patch("/:taskid", /*#__PURE__*/function () {
             }));
 
           case 6:
+            result.compliments = [];
             return _context4.abrupt("return", res.json(result));
 
-          case 9:
-            _context4.prev = 9;
+          case 10:
+            _context4.prev = 10;
             _context4.t0 = _context4["catch"](0);
 
             if (!(_context4.t0.name === "CastError")) {
-              _context4.next = 13;
+              _context4.next = 14;
               break;
             }
 
@@ -282,15 +281,15 @@ router.patch("/:taskid", /*#__PURE__*/function () {
               message: "taskId not valid for id type"
             }));
 
-          case 13:
+          case 14:
             return _context4.abrupt("return", res.status(500).json(_context4.t0));
 
-          case 14:
+          case 15:
           case "end":
             return _context4.stop();
         }
       }
-    }, _callee4, null, [[0, 9]]);
+    }, _callee4, null, [[0, 10]]);
   }));
 
   return function (_x7, _x8) {

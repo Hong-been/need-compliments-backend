@@ -9,7 +9,7 @@ exports.Goal = void 0;
 
 var _mongoose = _interopRequireDefault(require("mongoose"));
 
-var _types = require("utils/types");
+var _types = require("../utils/types");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -222,7 +222,7 @@ goalSchema.statics.deleteByGoalId = /*#__PURE__*/function () {
   };
 }();
 
-var Goal = _mongoose["default"].model("Goal", goalSchema);
+var Goal = _mongoose["default"].models.Goal || _mongoose["default"].model("Goal", goalSchema);
 
 exports.Goal = Goal;
 //# sourceMappingURL=goal.js.map

@@ -40,7 +40,6 @@ var taskSchema = new Schema({
     },
     required: true
   },
-  compliments: [],
   doneAt: {
     type: Number,
     required: true
@@ -224,7 +223,7 @@ taskSchema.statics.deleteByTaskId = /*#__PURE__*/function () {
   };
 }();
 
-var Task = _mongoose["default"].model("Task", taskSchema);
+var Task = _mongoose["default"].models.Task || _mongoose["default"].model("Task", taskSchema);
 
 exports.Task = Task;
 //# sourceMappingURL=task.js.map

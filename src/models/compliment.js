@@ -51,4 +51,5 @@ complitmentSchema.statics.deleteByComplimentId = async (complimentId) => {
 	return await Compliment.findByIdAndDelete(complimentId);
 };
 
-export const Compliment = mongoose.model("Compliment", complitmentSchema);
+export const Compliment =
+	mongoose.models.Compliment || mongoose.model("Compliment", complitmentSchema);

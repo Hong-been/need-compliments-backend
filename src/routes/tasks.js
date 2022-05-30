@@ -88,7 +88,7 @@ router.post("/", async (req, res) => {
 		});
 		result.compliments = [];
 		return res.json({
-			task: {result},
+			task: {...result},
 		});
 	} catch (err) {
 		if (err.name === "ValidationError") {
