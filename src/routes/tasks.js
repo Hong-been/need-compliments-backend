@@ -9,7 +9,7 @@ const router = Router();
 router.get("/", async (req, res) => {
 	const LIMIT = 20;
 	const {page, userId, combined, start, end, readPermission} = req.query;
-	const offset = page ? (page - 1) * LIMIT : null;
+	const offset = page ? (page - 1) * LIMIT : 0;
 
 	if (readPermission && readPermissionTypes.indexOf(readPermission) === -1) {
 		return res

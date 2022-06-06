@@ -40,15 +40,11 @@ taskSchema.statics.findByQueriesTasks = async (queries, limit, offset) => {
 		userId: userId || {$exists: true},
 		doneAt: start && end ? {$gte: start, $lte: end} : {$exists: true},
 	};
-
-	if (offset) {
-		return await Task.find(options)
-			.sort({doneAt: -1})
-			.limit(limit)
-			.skip(offset)
-			.lean();
-	}
-	return await Task.find(options).lean();
+	return await Task.find(options)
+		.sort({doneAt: -1})
+		.skip(offset)
+		.limit(limit)
+		.lean();
 };
 
 // PATCH: taskId를 주면 task로 업데이트 진행
